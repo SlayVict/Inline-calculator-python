@@ -1,11 +1,17 @@
 import re
 import math
+from Calculation import Calculator
 
 # expressio = input("Write math expressio: ")
 expressio = 'sqrt(4*sqrt(200+sqrt 3136))'
 print(expressio)
 
 def simplify(expressio):
+  expressio = expressio.replace("Pi","3.14159265359")
+  expressio = expressio.replace("pi","3.14159265359")
+
+  expressio = expressio.replace("E","2.7182818285")
+  
   expressio = expressio.replace(",", ".")
   
   expressio = expressio.replace("plus", "+")
@@ -19,7 +25,7 @@ def simplify(expressio):
   expressio = expressio.replace("times", "*")
   expressio = expressio.replace("multiplied by", "*")
   expressio = expressio.replace("mul", "*")
-  expressio = expressio.replace("multipli", "*")
+  expressio = expressio.replace("multiply", "*")
 
   expressio = expressio.replace("divide", "/")
   expressio = expressio.replace("divide by", "/")
@@ -30,36 +36,9 @@ def simplify(expressio):
 expressio = simplify(expressio)
 print(expressio)
 
-def searchSqrt(expressio):
-  while(True):
-    isEndFirst = False
-    isEndSecond = False
 
-    found=re.search(r'sqrt\(([^\(\)\D]|\.|\+|\*|/|-)*\)', expressio)
-    if found:  
-      step = found[0][5:-1]
-      stepAnswer = str(math.sqrt(eval(step)))
-      print(f'sqrt({step}) = {stepAnswer}')
-      expressio = expressio.replace(f'sqrt({step})', stepAnswer)
-    else:
-      isEndFirst = True
-      print("No steps for sqrt()")
 
-    found=re.search(r'sqrt\d+.?\d+', expressio)
-    if found:  
-      step = found[0][4:]
-      stepAnswer = str(math.sqrt(eval(step)))
-      print(f'sqrt{step} = {stepAnswer}')
-      expressio = expressio.replace(f'sqrt{step}', stepAnswer)
-    else:
-      isEndSecond = True
-      print("No steps for sqrt")
-    
-    if isEndFirst and isEndSecond:
-      break
-  return expressio
-
-expressio = searchSqrt(expressio)
+expressio = Calculator.searchSqrt(expressio)
 
 while(True):
   found=re.search(r'\([^\(\)]*\)', expressio)
@@ -75,3 +54,4 @@ while(True):
 print(expressio)
 expressio = str(eval(expressio))
 print(expressio)
+
